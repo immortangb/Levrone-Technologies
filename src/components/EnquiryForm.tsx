@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import { serviceGroups } from "@/lib/data";
 
-const field = "w-full rounded-md border border-slate-300 bg-white px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand";
+const field = "w-full rounded-md border border-line bg-white px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink";
 
 export default function EnquiryForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -26,25 +26,25 @@ export default function EnquiryForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-lg border border-slate-200 bg-white p-6 sm:grid-cols-2">
-      <label className="text-sm font-medium">Name *<input name="name" required maxLength={100} placeholder="Your name" className={field} /></label>
-      <label className="text-sm font-medium">Email *<input name="email" type="email" required maxLength={200} placeholder="you@email.com" className={field} /></label>
-      <label className="text-sm font-medium">Phone<input name="phone" maxLength={30} placeholder="Your phone number" className={field} /></label>
+    <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
+      <label className="text-sm font-medium">Name *<input name="name" required maxLength={100} placeholder="Your name" className={`mt-1.5 ${field}`} /></label>
+      <label className="text-sm font-medium">Email *<input name="email" type="email" required maxLength={200} placeholder="you@email.com" className={`mt-1.5 ${field}`} /></label>
+      <label className="text-sm font-medium">Phone<input name="phone" maxLength={30} placeholder="Your phone number" className={`mt-1.5 ${field}`} /></label>
       <label className="text-sm font-medium">Service needed
-        <select name="service" defaultValue="" className={field}>
+        <select name="service" defaultValue="" className={`mt-1.5 ${field}`}>
           <option value="">Select a service</option>
           {serviceGroups.map((g) => <option key={g.id} value={g.title}>{g.title}</option>)}
         </select>
       </label>
       <label className="text-sm font-medium sm:col-span-2">Message
-        <textarea name="message" rows={4} maxLength={2000} placeholder="Tell us what you need" className={field} />
+        <textarea name="message" rows={4} maxLength={2000} placeholder="Tell us what you need" className={`mt-1.5 ${field}`} />
       </label>
-      <button disabled={status === "sending"} className="rounded-md bg-brand py-3 font-semibold text-white hover:opacity-90 disabled:opacity-60 sm:col-span-2">
+      <button disabled={status === "sending"} className="rounded-full bg-ink py-3 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-60 sm:col-span-2">
         {status === "sending" ? "Sending…" : "Send message"}
       </button>
       <p role="status" className="text-sm sm:col-span-2">
-        {status === "sent" && "Message sent. We will get back to you within 24 hours."}
-        {status === "error" && "Your message did not send. Check your connection and try again, or call us."}
+        {status === "sent" && "Message sent — we'll get back to you within 24 hours."}
+        {status === "error" && "Your message didn't send. Check your connection and try again, or call us."}
       </p>
     </form>
   );
