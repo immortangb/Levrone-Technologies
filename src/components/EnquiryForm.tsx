@@ -1,11 +1,11 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
-import { serviceGroups } from "@/lib/data";
+import type { ServiceGroup } from "@/lib/data";
 
 const field = "w-full rounded-md border border-line bg-white px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink";
 
-export default function EnquiryForm() {
+export default function EnquiryForm({ serviceGroups }: { serviceGroups: ServiceGroup[] }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {

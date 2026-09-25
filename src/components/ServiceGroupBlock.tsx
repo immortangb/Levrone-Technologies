@@ -15,7 +15,7 @@ export default function ServiceGroupBlock({ group }: { group: ServiceGroup }) {
         <div>
           <ul className="divide-y divide-line border-y border-line">
             {items.map((s) => (
-              <li key={s.name} className="flex items-baseline justify-between gap-4 py-3">
+              <li key={s.id} className="flex items-baseline justify-between gap-4 py-3">
                 <span className="text-sm">{s.name}</span>
                 <span className="shrink-0 font-mono text-sm text-neutral-600">{s.price}</span>
               </li>

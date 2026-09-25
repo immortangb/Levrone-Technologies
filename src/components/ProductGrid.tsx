@@ -42,7 +42,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
       ) : (
         <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => (
-            <article key={p.name} className="group">
+            <article key={p.id} className="group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.image} alt={p.name} className="aspect-4/3 w-full rounded-lg border border-line object-cover" />
               <div className="mt-3">

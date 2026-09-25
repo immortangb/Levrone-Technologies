@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { business, serviceGroups } from "@/lib/data";
+import type { ServiceGroup, Settings } from "@/lib/data";
 
-export default function Footer() {
+export default function Footer({ settings, serviceGroups }: { settings: Settings; serviceGroups: ServiceGroup[] }) {
   return (
     <footer className="border-t border-line bg-paper">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-3">
@@ -18,13 +18,13 @@ export default function Footer() {
         <div>
           <p className="text-sm font-semibold">Contact</p>
           <ul className="mt-3 grid gap-2 text-sm text-neutral-600">
-            <li><a href={`tel:${business.phone.replace(/\s/g, "")}`} className="hover:text-ink">{business.phone}</a></li>
-            <li><a href={`mailto:${business.email}`} className="hover:text-ink">{business.email}</a></li>
-            <li>{business.hours}</li>
+            <li><a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="hover:text-ink">{settings.phone}</a></li>
+            <li><a href={`mailto:${settings.email}`} className="hover:text-ink">{settings.email}</a></li>
+            <li>{settings.hours}</li>
           </ul>
         </div>
       </div>
-      <p className="border-t border-line px-4 py-5 text-center text-xs text-neutral-500">© {new Date().getFullYear()} {business.name}. All rights reserved.</p>
+      <p className="border-t border-line py-5 text-center text-xs text-neutral-500">© {new Date().getFullYear()} Levrone Technologies. All rights reserved.</p>
     </footer>
   );
 }

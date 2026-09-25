@@ -3,7 +3,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { business } from "@/lib/data";
 
 const links = [
   ["Home", "/"],
@@ -13,7 +12,7 @@ const links = [
   ["Contact", "/contact"],
 ];
 
-export default function Header() {
+export default function Header({ phone }: { phone: string }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   return (
@@ -33,8 +32,8 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <a href={`tel:${business.phone.replace(/\s/g, "")}`} className="hidden rounded-full border border-ink px-4 py-2 text-sm font-medium hover:bg-ink hover:text-white md:inline-block">
-          {business.phone}
+        <a href={`tel:${phone.replace(/\s/g, "")}`} className="hidden rounded-full border border-ink px-4 py-2 text-sm font-medium hover:bg-ink hover:text-white md:inline-block">
+          {phone}
         </a>
         <button aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen(!open)} className="md:hidden">
           {open ? <X size={22} /> : <Menu size={22} />}
@@ -46,7 +45,7 @@ export default function Header() {
             {links.map(([label, href]) => (
               <li key={href}><Link href={href} onClick={() => setOpen(false)} className={pathname === href ? "font-semibold" : "text-neutral-600"}>{label}</Link></li>
             ))}
-            <li><a href={`tel:${business.phone.replace(/\s/g, "")}`} className="font-semibold">{business.phone}</a></li>
+            <li><a href={`tel:${phone.replace(/\s/g, "")}`} className="font-semibold">{phone}</a></li>
           </ul>
         </nav>
       )}
