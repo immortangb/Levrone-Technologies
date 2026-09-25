@@ -118,15 +118,20 @@ create trigger bookings_set_updated_at before update on public.bookings
 -- A client looks up their own booking with the reference PLUS the email or
 -- phone they booked with — this is why it's a function, not a public
 -- select policy: it proves they own the booking without exposing anyone else's.
-create or replace function public.get_booking_status(p_reference text, p_contact text)
+-- Dropped first because CREATE OR REPLACE can't change a function's return
+-- columns — this adds service_group_id, needed so the site can tell a
+-- repair booking apart from CCTV/support when deciding whether to show
+-- the collect/delivery choice.
+drop function if exists public.get_booking_status(text, text);
+create function public.get_booking_status(p_reference text, p_contact text)
 returns table (
   reference text, type text, status text, fulfillment text, delivery_address text,
   amount numeric, paid boolean, service_item_name text, product_name text,
-  created_at timestamptz, updated_at timestamptz
+  service_group_id text, created_at timestamptz, updated_at timestamptz
 )
 language sql security definer set search_path = public as $$
   select reference, type, status, fulfillment, delivery_address, amount, paid,
-         service_item_name, product_name, created_at, updated_at
+         service_item_name, product_name, service_group_id, created_at, updated_at
   from public.bookings
   where reference = p_reference and (email = p_contact or phone = p_contact)
   limit 1;

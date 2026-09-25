@@ -66,6 +66,8 @@ export const statusLabels: Record<BookingStatus, string> = {
 
 // Collect/delivery only makes sense for a physical device — a repair job
 // or a laptop order, not CCTV, support hours, or a general quote.
-export function eligibleForFulfillment(b: Pick<Booking, "type" | "service_group_id">) {
+// service_group_id is typed loosely (string, not the union) because it
+// often arrives straight from a database row rather than typed app state.
+export function eligibleForFulfillment(b: { type: Booking["type"]; service_group_id: string | null }) {
   return b.type === "product" || (b.type === "service" && b.service_group_id === "repairs");
 }
