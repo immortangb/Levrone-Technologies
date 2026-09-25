@@ -17,6 +17,30 @@ export type Product = {
 };
 export type Settings = { phone: string; email: string; hours: string };
 
+export type BookingStatus = "received" | "in_progress" | "completed" | "cancelled";
+export type Fulfillment = "collect" | "delivery";
+export type Booking = {
+  id: string;
+  reference: string;
+  type: "quote" | "service" | "product";
+  name: string;
+  email: string;
+  phone: string | null;
+  service_group_id: ServiceGroup["id"] | null;
+  service_item_name: string | null;
+  product_id: string | null;
+  product_name: string | null;
+  message: string | null;
+  amount: number | null;
+  status: BookingStatus;
+  fulfillment: Fulfillment | null;
+  delivery_address: string | null;
+  paid: boolean;
+  payment_reference: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 // Fallback used only if the database has no rows yet (e.g. schema.sql
 // hasn't been run) so the site never shows a broken empty page.
 export const fallbackSettings: Settings = {
@@ -32,3 +56,16 @@ export const reasons = [
   ["Fair pricing", "Transparent, competitive rates with no hidden costs."],
   ["Warranty protection", "All work is backed by a warranty."],
 ];
+
+export const statusLabels: Record<BookingStatus, string> = {
+  received: "Received",
+  in_progress: "In progress",
+  completed: "Completed",
+  cancelled: "Cancelled",
+};
+
+// Collect/delivery only makes sense for a physical device — a repair job
+// or a laptop order, not CCTV, support hours, or a general quote.
+export function eligibleForFulfillment(b: Pick<Booking, "type" | "service_group_id">) {
+  return b.type === "product" || (b.type === "service" && b.service_group_id === "repairs");
+}

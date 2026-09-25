@@ -1,28 +1,41 @@
 "use client";
 import { useState, type FormEvent } from "react";
-import { supabase } from "@/lib/supabase";
+import { submitQuote } from "@/app/actions/bookings";
 import type { ServiceGroup } from "@/lib/data";
 
 const field = "w-full rounded-md border border-line bg-white px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-ink";
 
 export default function EnquiryForm({ serviceGroups }: { serviceGroups: ServiceGroup[] }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [reference, setReference] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const d = new FormData(form);
     setStatus("sending");
-    const { error } = await supabase.from("enquiries").insert({
+    const result = await submitQuote({
       name: String(d.get("name")),
       email: String(d.get("email")),
-      phone: String(d.get("phone") || "") || null,
-      service: String(d.get("service") || "") || null,
-      message: String(d.get("message") || "") || null,
+      phone: String(d.get("phone") || ""),
+      service: String(d.get("service") || ""),
+      message: String(d.get("message") || ""),
     });
-    if (error) return setStatus("error");
+    if (!result.ok) { setErrorMsg(result.error); setStatus("error"); return; }
     form.reset();
+    setReference(result.reference);
     setStatus("sent");
+  }
+
+  if (status === "sent") {
+    return (
+      <div className="rounded-lg border border-line bg-white p-6">
+        <p className="text-sm text-neutral-700">Your reference number is</p>
+        <p className="mt-1 font-mono text-2xl font-semibold text-accent-dark">{reference}</p>
+        <p className="mt-3 text-sm text-neutral-600">We'll reply within 24 hours. Save this reference to check progress any time on the <a href="/track" className="underline underline-offset-4">Track status</a> page.</p>
+      </div>
+    );
   }
 
   return (
@@ -42,10 +55,7 @@ export default function EnquiryForm({ serviceGroups }: { serviceGroups: ServiceG
       <button disabled={status === "sending"} className="rounded-full bg-ink py-3 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-60 sm:col-span-2">
         {status === "sending" ? "Sending…" : "Send message"}
       </button>
-      <p role="status" className="text-sm sm:col-span-2">
-        {status === "sent" && "Message sent — we'll get back to you within 24 hours."}
-        {status === "error" && "Your message didn't send. Check your connection and try again, or call us."}
-      </p>
+      {status === "error" && <p className="text-sm text-red-600 sm:col-span-2">{errorMsg || "Your message didn't send. Check your connection and try again, or call us."}</p>}
     </form>
   );
 }

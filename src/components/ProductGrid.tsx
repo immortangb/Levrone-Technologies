@@ -1,16 +1,18 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import BookingDialog from "@/components/BookingDialog";
 import type { Product } from "@/lib/data";
 
 export default function ProductGrid({ products }: { products: Product[] }) {
   const brands = ["All", ...Array.from(new Set(products.map((p) => p.brand)))];
   const [brand, setBrand] = useState("All");
   const [query, setQuery] = useState("");
+  const [booking, setBooking] = useState<Product | null>(null);
   const q = query.trim().toLowerCase();
   const shown = products.filter(
     (p) => (brand === "All" || p.brand === brand) && (!q || `${p.name} ${p.brand} ${p.specs}`.toLowerCase().includes(q))
   );
+
   return (
     <>
       <div className="flex flex-wrap items-center gap-4">
@@ -36,9 +38,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
       </div>
 
       {shown.length === 0 ? (
-        <p className="mt-10 text-neutral-600">
-          No laptops match that search. <Link href="/contact" className="underline underline-offset-4">Ask us for a quote</Link> — we can usually source what you need.
-        </p>
+        <p className="mt-10 text-neutral-600">No laptops match that search. Ask us for a quote — we can usually source what you need.</p>
       ) : (
         <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => (
@@ -51,12 +51,19 @@ export default function ProductGrid({ products }: { products: Product[] }) {
                 <p className="text-sm text-neutral-600">{p.display}</p>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="font-mono text-lg">R{p.price.toLocaleString("en-US")}</span>
-                  <Link href="/contact" className="rounded-full border border-ink px-4 py-1.5 text-sm font-medium hover:bg-ink hover:text-white">Enquire</Link>
+                  <button onClick={() => setBooking(p)} className="rounded-full border border-ink px-4 py-1.5 text-sm font-medium hover:bg-ink hover:text-white">Order</button>
                 </div>
               </div>
             </article>
           ))}
         </div>
+      )}
+
+      {booking && (
+        <BookingDialog
+          target={{ kind: "product", productId: booking.id, productName: booking.name, amount: booking.price }}
+          onClose={() => setBooking(null)}
+        />
       )}
     </>
   );

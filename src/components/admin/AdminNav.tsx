@@ -5,9 +5,11 @@ import { createClient } from "@/lib/supabase/browser";
 
 const links = [
   ["Dashboard", "/admin"],
+  ["Bookings", "/admin/bookings"],
   ["Products", "/admin/products"],
   ["Services", "/admin/services"],
-  ["Enquiries", "/admin/enquiries"],
+  ["Reviews", "/admin/reviews"],
+  ["Analytics", "/admin/analytics"],
   ["Settings", "/admin/settings"],
 ];
 

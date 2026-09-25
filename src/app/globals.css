@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #171717;
-  --color-line: #e5e5e5;
-  --color-paper: #fafaf9;
+  --color-ink: #2b2420;
+  --color-line: #e2d5c0;
+  --color-paper: #f1e9d8;
+  --color-accent: #9c7a3f;
+  --color-accent-dark: #7c611f;
   --font-serif: var(--font-source-serif), Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", monospace;
@@ -11,5 +13,5 @@
 
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { background: #ffffff; color: var(--color-ink); }
-::selection { background: #171717; color: #ffffff; }
+body { background: #faf6ee; color: var(--color-ink); }
+::selection { background: #2b2420; color: #faf6ee; }

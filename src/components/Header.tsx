@@ -10,6 +10,8 @@ const links = [
   ["Laptops", "/products"],
   ["About", "/about"],
   ["Contact", "/contact"],
+  ["Track status", "/track"],
+  ["Reviews", "/reviews"],
 ];
 
 export default function Header({ phone }: { phone: string }) {

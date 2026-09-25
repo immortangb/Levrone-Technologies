@@ -1,9 +1,11 @@
 import Link from "next/link";
 
 const cards = [
+  ["Bookings", "/admin/bookings", "See every quote, service request and laptop order — update status, amount and payment."],
   ["Products", "/admin/products", "Add, edit, price and upload photos for the laptops you sell."],
   ["Services", "/admin/services", "Edit the repairs, sales, CCTV and support price lists."],
-  ["Enquiries", "/admin/enquiries", "See messages sent through the contact form."],
+  ["Reviews", "/admin/reviews", "Approve or remove client reviews before they go live."],
+  ["Analytics", "/admin/analytics", "Clients served and revenue, broken down by service and product."],
   ["Settings", "/admin/settings", "Update the phone number, email and business hours shown on the site."],
 ] as const;
 
