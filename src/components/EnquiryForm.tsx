@@ -15,17 +15,22 @@ export default function EnquiryForm({ serviceGroups }: { serviceGroups: ServiceG
     const form = e.currentTarget;
     const d = new FormData(form);
     setStatus("sending");
-    const result = await submitQuote({
-      name: String(d.get("name")),
-      email: String(d.get("email")),
-      phone: String(d.get("phone") || ""),
-      service: String(d.get("service") || ""),
-      message: String(d.get("message") || ""),
-    });
-    if (!result.ok) { setErrorMsg(result.error); setStatus("error"); return; }
-    form.reset();
-    setReference(result.reference);
-    setStatus("sent");
+    try {
+      const result = await submitQuote({
+        name: String(d.get("name")),
+        email: String(d.get("email")),
+        phone: String(d.get("phone") || ""),
+        service: String(d.get("service") || ""),
+        message: String(d.get("message") || ""),
+      });
+      if (!result.ok) { setErrorMsg(result.error); setStatus("error"); return; }
+      form.reset();
+      setReference(result.reference);
+      setStatus("sent");
+    } catch {
+      setErrorMsg("Something went wrong on our end. Try again, or contact us directly.");
+      setStatus("error");
+    }
   }
 
   if (status === "sent") {

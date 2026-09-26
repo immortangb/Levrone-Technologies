@@ -20,13 +20,18 @@ export default function BookingDialog({ target, onClose }: { target: Target; onC
     const phone = String(d.get("phone") || "");
     setState("sending");
 
-    const result = target.kind === "service"
-      ? await submitServiceBooking({ name, email, phone, groupId: target.groupId, groupTitle: target.groupTitle, itemName: target.itemName, itemPrice: target.itemPrice, message: String(d.get("message") || "") })
-      : await submitProductBooking({ name, email, phone, productId: target.productId, productName: target.productName, amount: target.amount });
+    try {
+      const result = target.kind === "service"
+        ? await submitServiceBooking({ name, email, phone, groupId: target.groupId, groupTitle: target.groupTitle, itemName: target.itemName, itemPrice: target.itemPrice, message: String(d.get("message") || "") })
+        : await submitProductBooking({ name, email, phone, productId: target.productId, productName: target.productName, amount: target.amount });
 
-    if (!result.ok) { setErrorMsg(result.error); setState("error"); return; }
-    setReference(result.reference);
-    setState("done");
+      if (!result.ok) { setErrorMsg(result.error); setState("error"); return; }
+      setReference(result.reference);
+      setState("done");
+    } catch {
+      setErrorMsg("Something went wrong on our end. Try again, or contact us directly.");
+      setState("error");
+    }
   }
 
   const title = target.kind === "service" ? target.itemName : target.productName;
